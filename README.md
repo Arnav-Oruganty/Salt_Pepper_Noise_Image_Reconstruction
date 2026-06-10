@@ -22,41 +22,40 @@ The project evaluates reconstruction quality using Mean Squared Error (MSE), obj
 
 Given a noisy image \(X_{corr}\), reconstruct the clean image \(X\).
 
-### Easy Formulation
+## Easy Formulation
 
-\[
+Given a corrupted image $X_{corr}$, we reconstruct the image $X$ by solving:
+
+$$
 \min_X \|X - X_{corr}\|_F^2 +
 \lambda \left(
 \sum (X_{i,j+1}-X_{i,j})^2 +
 \sum (X_{i+1,j}-X_{i,j})^2
 \right)
-\]
+$$
 
 where:
 
-- First term ensures fidelity to the observed noisy image.
-- Second term encourages smoothness between neighboring pixels.
-- \(\lambda\) controls the regularization strength.
-
+- $\|X - X_{corr}\|_F^2$ is the data fidelity term.
+- The regularization term promotes smoothness between neighboring pixels.
+- $\lambda$ controls the trade-off between reconstruction fidelity and smoothness.
 ---
 
-### Hard Formulation (Total Variation)
+## Hard Formulation (Total Variation Regularization)
 
-\[
-\min_X \|X - X_{corr}\|_F^2 + \lambda \, TV(X)
-\]
+The Total Variation (TV) formulation is given by:
 
-where:
+$$
+\min_X \|X - X_{corr}\|_F^2 + \lambda\,TV(X)
+$$
 
-\[
-TV(X) = \sum_{i,j}
-\sqrt{
-(X_{i+1,j}-X_{i,j})^2 +
-(X_{i,j+1}-X_{i,j})^2
-}
-\]
+where
 
-This formulation preserves sharp image edges more effectively than quadratic smoothing.
+$$
+TV(X)=\sum_{i,j}\sqrt{(X_{i+1,j}-X_{i,j})^2+(X_{i,j+1}-X_{i,j})^2}
+$$
+
+TV regularization preserves edges while removing noise, often producing sharper reconstructions than quadratic regularization.
 
 ---
 
@@ -218,16 +217,15 @@ Uses:
 
 ---
 
-## Evaluation Metrics
+## Evaluation Metric
 
 ### Mean Squared Error (MSE)
 
-\[
-MSE = \frac{1}{MN}
-\sum_{i,j}(X_{recon} - X_{true})^2
-\]
+$$
+MSE=\frac{1}{MN}\sum_{i=1}^{M}\sum_{j=1}^{N}\left(X^{recon}_{i,j}-X^{true}_{i,j}\right)^2
+$$
 
-Lower values indicate better reconstruction quality.
+Lower MSE values indicate better reconstruction quality.
 
 ---
 
